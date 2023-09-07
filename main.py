@@ -7,9 +7,7 @@ if __name__ == "__main__":
     cl = cloudlink()
 
     # Create a new server object. This supports initializing many servers at once.
-    allowed_website = 'https://turbowarp.org'
-    
-    server = cl.server(logs=True, allowed_origin=allowed_website)
+    server = cl.server(logs=True)
 
     # Create examples for various ways to extend the functionality of Cloudlink Server.
 
@@ -44,3 +42,4 @@ if __name__ == "__main__":
 
     # Run the server.
     server.run(ip="0.0.0.0", port=3000)
+
