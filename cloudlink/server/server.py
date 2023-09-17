@@ -444,10 +444,10 @@ class server:
         return self.supporter.valid
 
     async def __run_method__(self, client: type, message: dict):
-        # Detect connection protocol (supports Cloudlink CLPv4 or Scratch Cloud Variables Protocol)
+        # Detect connection protocol (supports CloudProtocol)
         if client.protocol == self.supporter.proto_unset:
             if "cmd" in message:
-                # Update the client's protocol type and update the clients iterable
+                # Update the client's protocol type and update the c
                 client.protocol = self.supporter.proto_cloudlink
                 self.clients.set_protocol(client, self.supporter.proto_cloudlink)
 
@@ -461,13 +461,13 @@ class server:
                     await client.close(code=1000, reason="Scratch protocol is disabled")
                     return
 
-                # Update the client's protocol type and update the clients iterable
+                # Update the client's protocol type and update the cl
                 client.protocol = self.supporter.proto_scratch_cloud
                 self.clients.set_protocol(client, self.supporter.proto_scratch_cloud)
 
                 return await self.__scratch_method_handler__(client, message)
             else:
-                # Reject the client because the server does not understand the protocol being used
+                # Reject the client because the server does not unde
                 return self.supporter.unknown_protocol
 
         elif client.protocol == self.supporter.proto_cloudlink:
@@ -482,8 +482,14 @@ class server:
             raise TypeError(f"Unknown protocol type: {client.protocol}")
 
     async def __handler__(self, client):
+          # Erhalten Sie den Origin-Header aus den HTTP-Anforderungs-Headern
+        origin = client.request_headers.get("Origin")
+    
+    # Definieren Sie eine Liste von erlaubten Ursprüngen
+        erlaubte_origins = ['serve.gamejolt.com', 'https://ihre-erlaubte-website.com']
+
         if self.check_ip_addresses:
-            # Get the IP address of client
+         # Get the IP address of client
             client.full_ip = self.get_client_ip(client)
 
         rejected = False
@@ -496,21 +502,29 @@ class server:
             self.supporter.log(f"Client rejected: IP address {client.full_ip} blocked")
             await client.close(code=1008, reason="IP blocked")
 
-        # Do absolutely nothing if the client was rejected
+    # Origin-Überprüfung
+        if origin not in erlaubte_origins:
+            rejected = True
+            self.supporter.log(f"Client rejected: Origin {origin} not allowed")
+            await client.close(code=1008, reason="Origin not allowed")
+
+    # Do absolutely nothing if the client was rejected
         if not rejected:
-            # Set the initial protocol type
+        # Set the initial protocol type
             client.protocol = self.supporter.proto_unset
 
-            # Assign an ID to the client
+        # Assign an ID to the client
             client.id = self.id_counter
             self.id_counter += 1
 
-            # Register the client
+        # Register the client
             self.clients.create(client)
 
-            # Configure client
+        # Configure client
             client.rooms = set()
             client.username_set = False
+      
+    
             client.linked = False
             client.friendly_username = None
             
