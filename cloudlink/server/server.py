@@ -486,7 +486,7 @@ class server:
         origin = client.request_headers.get("Origin")
     
     # Definieren Sie eine Liste von erlaubten Ursprüngen
-        erlaubte_origins = ['https://serve.gamejolt.net', 'https://turbowarp.org']
+        erlaubte_origins = ['https://serve.gamejolt.net', 'https://turbowarp.org', 'tw-editor://.']
 
         if self.check_ip_addresses:
          # Get the IP address of client
