@@ -114,7 +114,7 @@ class server:
             self.logger.error(f"Failed to initialize SSL support! {e}")
 
 
-    async def handle_cors_headers(self, path, request_headers):
+      async def handle_cors_headers(self, path, request_headers):
         # Handle CORS headers here
         response_headers = [
             ("Access-Control-Allow-Origin", "https://your.allowed.domain"),  # Specify your allowed domain
