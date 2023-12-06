@@ -104,14 +104,7 @@ class server:
         self.ssl_context = None
 
     # Enables SSL support
-    async def handle_cors_headers(self, path, request_headers):
-        # Handle CORS headers here
-        response_headers = [
-            ("Access-Control-Allow-Origin", "https://your.allowed.domain"),  # Specify your allowed domain
-            ("Access-Control-Allow-Headers", "content-type"),
-        ]
 
-        return response_headers
 
     async def enable_ssl(self, certfile, keyfile):
         try:
