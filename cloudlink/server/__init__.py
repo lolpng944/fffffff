@@ -104,9 +104,7 @@ class server:
         self.ssl_context = None
 
     # Enables SSL support
-
-
-    async def enable_ssl(self, certfile, keyfile):
+    def enable_ssl(self, certfile, keyfile):
         try:
             self.ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
             self.ssl_context.load_cert_chain(certfile=certfile, keyfile=keyfile)
